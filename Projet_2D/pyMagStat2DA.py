@@ -38,8 +38,8 @@ def  readmsh(filename) :
   ref=zeros(nbnoeud,int)
   triangle=zeros((nbelt,3),int)
   NumDom=zeros(nbelt,int)
-  print nbnoeud
-  print nbelt
+  print(nbnoeud)
+  print(nbelt)
   for i in range(nbnoeud) :
     line=f.readline()
     data = line.split()
@@ -112,7 +112,7 @@ for ielt in range(nbelt) :
   for inoeud in range(3) :
     SdMembre[NumNoeuds[inoeud]] =  SdMembre[NumNoeuds[inoeud]]+SdElmt[inoeud]
     for jnoeud in range(3) :
-    	 MatMef[NumNoeuds[inoeud],NumNoeuds[jnoeud]] =  MatMef[NumNoeuds[inoeud],NumNoeuds[jnoeud]]+MatElmt[inoeud,jnoeud]
+    	MatMef[NumNoeuds[inoeud],NumNoeuds[jnoeud]] =  MatMef[NumNoeuds[inoeud],NumNoeuds[jnoeud]]+MatElmt[inoeud,jnoeud]
   
 # fin de boucle sur les elts
 
@@ -120,8 +120,8 @@ for ielt in range(nbelt) :
 
 for inoeud in range(nbnoeud) :
     if (abs(ref[inoeud])==2) :
-	MatMef[inoeud,inoeud]=MatMef[inoeud,inoeud]+1.e7
-	SdMembre[inoeud]=0
+      MatMef[inoeud,inoeud]=MatMef[inoeud,inoeud]+1.e7
+      SdMembre[inoeud]=0
 
 tol = 1e-10
 
@@ -131,7 +131,7 @@ MatMefCsr = MatMef.tocsr()
 Sol=cg(MatMefCsr,SdMembre,Az0,1e-6,nbnoeud)
 Az=real(Sol[0]) # recupere le tuple
 
-print 'Time for solving the system using CSR matrix: %8.2f sec' % (time.clock() - t1, )
+print('Time for solving the system using CSR matrix: %8.2f sec' % (time.clock() - t1, ))
 
 def rotationnel(x,y,Sol) :
 
@@ -144,7 +144,7 @@ def rotationnel(x,y,Sol) :
 
   for ielt in range(nbelt) :
 
-   # Recuperation des donnees elementaires
+    # Recuperation des donnees elementaires
 
     NumNoeuds = triangle[ielt][0:3]
     NumNoeuds=NumNoeuds-1
@@ -162,13 +162,13 @@ def rotationnel(x,y,Sol) :
     InvJac = matrix([ [double(ye[2]-ye[0]) , double(-ye[1]+ye[0])] , [double(-xe[2]+xe[0]) , double(xe[1]-xe[0]) ] ])/DetJac
 
     # Calcul du rotationnel
-   
+
     for inoeud in range(3) :
       for j in range(2) :
-         
-       Bx[ielt]= Bx[ielt]+(InvJac[1,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]])
-       By[ielt]= By[ielt]-(InvJac[0,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]]) 
-   
+        
+        Bx[ielt]= Bx[ielt]+(InvJac[1,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]])
+        By[ielt]= By[ielt]-(InvJac[0,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]]) 
+  
   return xg,yg,Bx,By
 
 # Visualisation des lignes de champ magnétique (interpolation sur une grille uniforme)
