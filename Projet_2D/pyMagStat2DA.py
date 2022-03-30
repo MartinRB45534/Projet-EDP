@@ -28,41 +28,50 @@ from scipy.sparse.linalg import cg
 def  readmsh(filename) :
 
   f=open(filename,'r')
-
+  i=0
+  while f.readline().split()[0] != "$Nodes": #On va jusqu'aux noeuds
+    pass
   line=f.readline()
   data = line.split()
   nbnoeud=int(data[0])
-  nbelt=int(data[1])
   x=zeros(nbnoeud,double)
   y=zeros(nbnoeud,double)
+  z=zeros(nbnoeud,double)
   ref=zeros(nbnoeud,int)
-  triangle=zeros((nbelt,3),int)
-  NumDom=zeros(nbelt,int)
   print(nbnoeud)
-  print(nbelt)
   for i in range(nbnoeud) :
     line=f.readline()
     data = line.split()
-    x[i]=double(data[0])
-    y[i]=double(data[1])
-    ref[i]=int(data[2])
-
+    ref[i]=int(data[0])
+    x[i]=double(data[1])
+    y[i]=double(data[2])
+    z[i]=double(data[3])
+  while f.readline().split()[0] != "$Elements": #On va jusqu'aux éléments
+    pass
+  line=f.readline()
+  data = line.split()
+  nbelt=int(data[0])
+  triangle=zeros((nbelt,4),int)
+  NumDom=zeros(nbelt,int)
+  print(nbelt)
   for i in range(nbelt) :
     line=f.readline()
     data = line.split()
-    triangle[i,0]=int(data[0])
-    triangle[i,1]=int(data[1])
-    triangle[i,2]=int(data[2])
-    NumDom[i]=int(data[3])
+    NumDom[i]=int(data[0])
+    triangle[i,0]=int(data[1])
+    triangle[i,1]=int(data[2])
+    triangle[i,2]=int(data[3])
+    triangle[i,3]=int(data[4])
 
   f.close() 
-  return x,y,ref,triangle,NumDom,nbnoeud,nbelt
+  return x,y,z,ref,triangle,NumDom,nbnoeud,nbelt
 
 # Debut programme principal
 
 # lecture du maillage
 
-x,y,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("fil.msh")
+x,y,z,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("Projet_2D/geomCarre.msh")
+
 
 # Donnees physiques du problemes
 J=array([1.e7, 0.])
@@ -70,15 +79,16 @@ mu0=4e-7*math.pi
 mu=array([mu0, mu0])
 
 
-t1 = time.clock()
+t1 = time.clock_gettime()
 # Solution d'un probleme de magnetostatique
 
 MatMef = lil_matrix((nbnoeud,nbnoeud))
 SdMembre = zeros(nbnoeud,double)
 Az = zeros(nbnoeud,double)
 
-xe=zeros((3,1),double)
+xe=zeros((3,1),double) #Est-ce que c'est 3 ici ? Qu'est-ce que ça fait ?
 ye=zeros((3,1),double)
+ze=zeros((3,1),double)
 InvJac=zeros((2,2),double)
 MatElmt=zeros((3,3),double)
 SdElmt=zeros(3,double)
@@ -131,7 +141,7 @@ MatMefCsr = MatMef.tocsr()
 Sol=cg(MatMefCsr,SdMembre,Az0,1e-6,nbnoeud)
 Az=real(Sol[0]) # recupere le tuple
 
-print('Time for solving the system using CSR matrix: %8.2f sec' % (time.clock() - t1, ))
+print('Time for solving the system using CSR matrix: %8.2f sec' % (time.clock_gettime() - t1, ))
 
 def rotationnel(x,y,Sol) :
 
@@ -168,7 +178,7 @@ def rotationnel(x,y,Sol) :
         
         Bx[ielt]= Bx[ielt]+(InvJac[1,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]])
         By[ielt]= By[ielt]-(InvJac[0,j]*Grad[j,inoeud]*Sol[NumNoeuds[inoeud]]) 
-  
+
   return xg,yg,Bx,By
 
 # Visualisation des lignes de champ magnétique (interpolation sur une grille uniforme)
