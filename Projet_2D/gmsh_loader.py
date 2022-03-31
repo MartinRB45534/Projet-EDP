@@ -37,11 +37,11 @@ def  readmsh(filename) :
   for i in range(nbelt) :
     line=f.readline()
     data = line.split()
-    NumDom[i]=int(data[0])
-    triangle[i,0]=int(data[1])
-    triangle[i,1]=int(data[2])
-    triangle[i,2]=int(data[3])
-    triangle[i,3]=int(data[4])
+    if len(data) > 7:
+        NumDom[i]=int(data[0])
+        triangle[i,0]=int(data[5])
+        triangle[i,1]=int(data[6])
+        triangle[i,2]=int(data[7])
 
   f.close() 
   return x,y,z,ref,triangle,NumDom,nbnoeud,nbelt
