@@ -31,17 +31,22 @@ def  readmsh(filename) :
   line=f.readline()
   data = line.split()
   nbelt=int(data[0])
-  triangle=zeros((nbelt,4),int)
-  NumDom=zeros(nbelt,int)
+  #triangle=zeros((nbelt,4),int)
+  triangle=array([[0,0,0]])
+  #NumDom=zeros(nbelt,int)
+  NumDom=array([])
   print(nbelt)
   for i in range(nbelt) :
     line=f.readline()
     data = line.split()
     if len(data) > 7:
-        NumDom[i]=int(data[0])
-        triangle[i,0]=int(data[5])
-        triangle[i,1]=int(data[6])
-        triangle[i,2]=int(data[7])
+        # NumDom[i]=int(data[1])
+        NumDom=append(NumDom,int(data[1]))
+        # triangle[i,0]=int(data[-3])
+        # triangle[i,1]=int(data[-2])
+        # triangle[i,2]=int(data[-1])
+        triangle=append(triangle,[[int(data[-3]),int(data[-2]),int(data[-1])]],axis=0)
+  triangle = triangle[1:,:]
 
   f.close() 
   return x,y,z,ref,triangle,NumDom,nbnoeud,nbelt
