@@ -11,7 +11,7 @@ import os
 def f(x,y):
     return 1
 
-x,y,z,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("Projet_2D/test.msh")
+x,y,z,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("Projet_2D/cylinder.msh")
 
 fig = plt.figure()
 ax = plt.subplot()
@@ -26,6 +26,6 @@ rig = matrice_rigidite(x,y,triangle)
 print(rig)
 mat_f = matrice_f(x,y,triangle,f)
 print(mat_f)
-pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_f_test.p",'wb'))
+pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_cylinder_f_1.p",'wb'))
 ax.axis('scaled')
 plt.show()
