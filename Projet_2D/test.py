@@ -3,6 +3,7 @@ from Projet_2D.matrice_rigidite import matrice_rigidite
 from Projet_2D.matrice_f import matrice_f
 
 from matplotlib import mlab
+from math import cos, sin
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle as pkl
@@ -24,8 +25,15 @@ for tri in triangle:
     ax.plot(x_,y_)
 rig = matrice_rigidite(x,y,triangle)
 print(rig)
+def f(x,y):
+    return 2*cos(10*x)*sin(10*y) + sin(10*x*y)
 mat_f = matrice_f(x,y,triangle,f)
 print(mat_f)
-pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_cylinder_f_1_verif.p",'wb'))
+pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_cylinder_f.p",'wb'))
+def f(x,y):
+    return 1
+mat_f = matrice_f(x,y,triangle,f)
+print(mat_f)
+pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_cylinder_f_1_simpl.p",'wb'))
 ax.axis('scaled')
 plt.show()
