@@ -5,11 +5,13 @@ from Projet_2D.matrice_f import matrice_f
 from matplotlib import mlab
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle as pkl
+import os
 
 def f(x,y):
     return 1
 
-x,y,z,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("Projet_2D/cylinder.msh")
+x,y,z,ref,triangle,NumDom,nbnoeud,nbelt = readmsh("Projet_2D/test.msh")
 
 fig = plt.figure()
 ax = plt.subplot()
@@ -22,6 +24,8 @@ for tri in triangle:
     ax.plot(x_,y_)
 rig = matrice_rigidite(x,y,triangle)
 print(rig)
-f = matrice_f(x,y,triangle,f)
+mat_f = matrice_f(x,y,triangle,f)
+print(mat_f)
+pkl.dump(mat_f,open(os.path.abspath(".")+"/matrice_f_test.p",'wb'))
 ax.axis('scaled')
 plt.show()
