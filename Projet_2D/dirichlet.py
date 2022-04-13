@@ -1,6 +1,10 @@
 import numpy as np
 
 def dirichlet(x,y,rig,f):
+    """
+    Retire les colonnes et les lignes inutiles selon les conditions de Dirichlet
+    On suppose que le domaine est rectangulaire (les limites sont les points qui minimisent ou maximisent une coordonnée)
+    """
     x_=x
     y_=y
     rig_=rig
